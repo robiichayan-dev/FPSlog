@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fawares Petroleum Services Co</title>
+    <meta name="theme-color" content="#4f46e5">
+    <meta name="description" content="Track and manage petroleum service work activities">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkZhd2FyZXMgUGV0cm9sZXVtIFNlcnZpY2VzIiwKICAic2hvcnRfbmFtZSI6ICJGYXdhcmVzIiwKICAiZGVzY3JpcHRpb24iOiAiVHJhY2sgYW5kIG1hbmFnZSBwZXRyb2xldW0gc2VydmljZSB3b3JrIGFjdGl2aXRpZXMiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiI2Y5ZmFmYiIsCiAgInRoZW1lX2NvbG9yIjogIiM0ZjQ2ZTUiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImljb24tMTkyeDE5Mi5wbmciLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiaWNvbi01MTJ4NTEyLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIgogICAgfQogIF0KfQ==">
+    
+    <!-- iOS Safari PWA support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Fawares Petroleum">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAFEmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4=">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Magneto&display=swap" rel="stylesheet">
+    <style>
+        .input-field { transition: all 0.3s; }
+        .input-field:focus { box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3); }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .slide-in-right { animation: slideInRight 0.3s ease-out forwards; }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .log-checkbox { display: none; }
+        .log-item { transition: all 0.3s; }
+        .log-item:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .log-checkbox:checked + .log-item { background-color: #e0e7ff; border-color: #4F46E5; }
+        .share-options-panel { transition: all 0.3s ease; }
+        .selection-mode .log-checkbox { display: block; position: absolute; left: 1rem; top: 1rem; width: 1.2rem; height: 1.2rem; z-index: 10; }
+        .selection-mode .log-item { padding-left: 3rem; }
+        .custom-select {
+            appearance: none; -webkit-appearance: none; -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 1rem;
+        }
+        .multiselect-container { position: relative; }
+        .multiselect-selected { display: none; }
+        .multiselect-dropdown {
+            position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #d1d5db; border-radius: 0.75rem;
+            margin-top: 0.25rem; max-height: 200px; overflow-y: auto; z-index: 50; display: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .multiselect-dropdown.show { display: block; }
+        .multiselect-option { padding: 0.75rem 1rem; cursor: pointer; border-bottom: 1px solid #f3f4f6; }
+        .multiselect-option:last-child { border-bottom: none; }
+        .multiselect-option:hover { background-color: #f9fafb; }
+        .multiselect-option.selected { background-color: #e0e7ff; color: #4f46e5; }
+        .multiselect-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+        .multisecept-tag { background-color: #e0e7ff; color: #4f46e5; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.875rem; display: flex; align-items: center; }
+        .multiselect-tag-remove { margin-left: 0.25rem; cursor: pointer; font-weight: bold; }
+        .company-title { font-family: 'Magneto', cursive; color: #5D4037; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); }
+        .share-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 100;
+            justify-content: center; align-items: center;
+        }
+        .share-modal-content {
+            background-color: white; border-radius: 1rem; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .share-option { display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid #e5e7eb; cursor: pointer; transition: background-color 0.2s; }
+        .share-option:last-child { border-bottom: none; }
+        .share-option:hover { background-color: #f9fafb; }
+        .share-option-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 1rem; font-size: 1.25rem; }
+        .share-preview { padding: 1rem; border-top: 1px solid #e5e7eb; max-height: 200px; overflow-y: auto; font-family: monospace; white-space: pre-wrap; font-size: 0.875rem; background-color: #f9fafb; }
+        .searchable-dropdown { position: relative; }
+        .searchable-dropdown input { padding-right: 2.5rem; }
+        .searchable-dropdown .dropdown-icon { position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); pointer-events: none; color: #6b7280; }
+        .dropdown-options {
+            position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #d1d5db; border-radius: 0.5rem;
+            margin-top: 0.25rem; max-height: 200px; overflow-y: auto; z-index: 50; display: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .dropdown-options.show { display: block; }
+        .dropdown-option { padding: 0.75rem 1rem; cursor: pointer; border-bottom: 1px solid #f3f4f6; }
+        .dropdown-option:last-child { border-bottom: none; }
+        .dropdown-option:hover { background-color: #f9fafb; }
+        .install-btn {
+            position: fixed; bottom: 20px; right: 20px; background: #4f46e5; color: white; border: none; border-radius: 50%;
+            width: 60px; height: 60px; font-size: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            cursor: pointer; z-index: 1000; display: none; justify-content: center; align-items: center;
+        }
+        .offline-notification { position: fixed; top: 0; left: 0; right: 0; background: #f59e0b; color: white; text-align: center; padding: 10px; z-index: 1000; display: none; }
+        .sync-status { position: fixed; bottom: 20px; left: 20px; background: #4f46e5; color: white; padding: 10px 15px; border-radius: 50px; font-size: 14px; z-index: 1000; display: flex; align-items: center; gap: 8px; }
+        .sync-progress { display: none; }
+        .sync-indicator { margin-left: 5px; }
+        .device-id-badge { 
+            position: fixed; 
+            top: 10px; 
+            right: 10px; 
+            background: #4f46e5; 
+            color: white; 
+            padding: 5px 10px; 
+            border-radius: 20px; 
+            font-size: 12px; 
+            z-index: 1000; 
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <!-- Install button -->
+    <button id="installBtn" class="install-btn"><i class="fas fa-download"></i></button>
+    
+    <!-- Device ID badge -->
+    <div id="deviceIdBadge" class="device-id-badge">Device: <span id="deviceId"></span></div>
+    
+    <!-- Offline notification -->
+    <div id="offlineNotification" class="offline-notification"><i class="fas fa-wifi"></i> You are currently offline</div>
+    
+    <!-- Sync status -->
+    <div id="syncStatus" class="sync-status">
+        <i class="fas fa-sync"></i> 
+        <span id="syncStatusText">All data synced</span>
+        <div id="syncProgress" class="sync-progress"><i class="fas fa-spinner fa-spin sync-indicator"></i></div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <header class="text-center mb-8 fade-in">
+            <h1 class="text-4xl font-bold mb-2 company-title">Fawares Petroleum Services Co</h1>
+            <p class="text-gray-600">Track and manage your work activities</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-gray-200">
+            <!-- User Info -->
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center bg-indigo-100 text-indigo-800 rounded-full px-4 py-2">
+                    <i class="fas fa-user-circle mr-2"></i>
+                    <span>User: <span id="user-id" class="font-mono">user-<span id="user-id-suffix"></span></span></span>
+                </div>
+            </div>
+
+            <!-- Notification -->
+            <div id="notification" class="fixed top-4 right-4 z-50 p-4 text-white rounded-xl shadow-lg hidden">
+                <div class="flex items-center justify-between">
+                    <span id="notification-text"></span>
+                    <button onclick="hideNotification()" class="ml-4 text-white hover:text-gray-200"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+
+            <!-- Share Modal -->
+            <div id="share-modal" class="share-modal">
+                <div class="share-modal-content">
+                    <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+                        <h3 class="text-lg font-semibold text-gray-800"><i class="fas fa-share-alt mr-2"></i>Share Work Logs</h3>
+                        <button onclick="closeShareModal()" class="text-gray-500 hover:text-gray-700"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div id="share-options-list"></div>
+                    <div class="share-preview">
+                        <div class="text-sm text-gray-500 mb-1">Preview:</div>
+                        <div id="share-preview-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Section -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4"><i class="fas fa-plus-circle mr-2 text-indigo-500"></i>Add New Work Log</h2>
+                
+                <form id="work-log-form" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="block text-sm font-medium mb-1 text-gray-700">Date *</label><input type="date" id="date" name="date" required class="input-field w-full px-4 py-2 bg-gray-100 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
+                        <div><label class="block text-sm font-medium mb-1 text-gray-700">Work Type *</label><select id="workType" name="workType" required class="input-field w-full px-4 py-2 bg-gray-100 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 custom-select"><option value="">Select Work Type</option><option value="Send SRP Pump">Send SRP Pump</option><option value="Received SRP Pump">Received SRP Pump</option><option value="Assembled SRP Pump">Assembled SRP Pump</option><option value="Tear down SRP Pump">Tear down SRP Pump</option></select></div>
+                        <div><label class="block text-sm font-medium mb-1 text-gray-700">Pump API *</label><select id="pumpAPI" name="pumpAPI" required class="input-field w-full px-4 py-2 bg-gray-100 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 custom-select"><option value="">Select Pump API</option><option value="25-225-THBM-16-2-2-0">25-225-THBM-16-2-2-0</option><option value="25-225-THBM-22-2-2-0">25-225-THBM-22-2-2-0</option><option value="25-275-OSTP-22-2-2-0">25-275-OSTP-22-2-2-0</option><option value="25-275-THEM-16-2-2-0">25-275-THEM-16-2-2-0</option><option value="25-275-THEM-18-2-2-0">25-275-THEM-18-2-2-0</option><option value="25-275-THEM-22-1-2-0">25-275-THEM-22-1-2-0</option><option value="25-275-THEM-22-2-2-0">25-275-THEM-22-2-2-0</option><option value="25-325-OSTP-22-2-2-0">25-325-OSTP-22-2-2-0</option><option value="25-325-THEM-16-2-2-0">25-325-THEM-16-2-2-0</option><option value="25-325-THEM-22-1-2-0">25-325-THEM-22-1-2-0</option><option value="25-325-THEM-22-2-2-0">25-325-THEM-22-2-2-0</option><option value="30-275-THBM-16-2-2-0">30-275-THBM-16-2-2-0</option><option value="30-275-THBM-22-1-2-0">30-275-THBM-22-1-2-0</option><option value="30-275-THBM-22-2-2-0">30-275-THBM-22-2-2-0</option><option value="40-375-OSTP-22-2-2-0">40-375-OSTP-22-2-2-0</option><option value="40-375-THEM-14-1-2-0">40-375-THEM-14-1-2-0</option><option value="40-375-THEM-16-1-2-0">40-375-THEM-16-1-2-0</option><option value="40-375-THEM-16-2-2-0">40-375-THEM-16-2-2-0</option><option value="40-375-THEM-18-2-2-0">40-375-THEM-18-2-2-0</option><option value="40-375-THEM-22-1-2-0">40-375-THEM-22-1-2-0</option><option value="40-375-THEM-22-2-2-0">40-375-THEM-22-2-2-0</option></select></div>
+                        <div class="searchable-dropdown"><label class="block text-sm font-medium mb-1 text-gray-700">Rig No *</label><input type="text" id="rigNo" name="rigNo" placeholder="Search or select Rig No" required class="input-field w-full px-4 py-2 bg-gray-100 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" autocomplete="off"><i class="fas fa-chevron-down dropdown-icon"></i><div id="rigNo-options" class="dropdown-options"></div></div>
+                        <div class="searchable-dropdown"><label class="block text-sm font-medium mb-1 text-gray-700">Well No</label><input type="text" id="wellNo" name="wellNo" placeholder="Search or select Well No" class="input-field w-full px-4 py-2 bg-gray-100 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" autocomplete="off"><i class="fas fa-chevron-down dropdown-icon"></i><div id="wellNo-options" class="dropdown-options"></div></div>
+                        <div><label class="block text-sm font-medium mb-1 text-gray-700">Pump SL No</label><input type="text" id="pumpSLNo" name="pumpSLNo" placeholder="Pump SL No" class="input-field w-full px-4 py-2 bg-gray-100 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
+                    </div>
+                    
+                    <!-- ON/OFF Tool and Polish Rod Fields -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="block text-sm font-medium mb-1 text-gray-700">ON/OFF Tool</label><div class="flex gap-2"><select id="onOffTool" name="onOffTool" class="input-field w-full px-4 py-2 bg-gray-100 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 custom-select"><option value="">Select Size</option><option value="⅞">⅞"</option><option value="1">1"</option></select><select id="onOffToolType" name="onOffToolType" class="input-field w-full px-4 py-2 bg-gray-100 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 custom-select"><option value="">Select Type</option><option value="FPS">FPS</option><option value="JO">JO</option></select></div></div>
+                        <div><label class="block text-sm font-medium mb-1 text-gray-700">Polish Rod</label><div class="flex gap-2"><select id="polishRod" name="polishRod" class="input-field w-full px-4 py-2 bg-gray-100 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 custom-select"><option value="">Select Size</option><option value="1½x30">1½"x30'</option><option value="1½x22">1½"x22'</option><option value="1¼x22">1¼"x22'</option></select><select id="polishRodType" name="polishRodType" class="input-field w-full px-4 py-2 bg-gray-100 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 custom-select"><option value="">Select Type</option><option value="FPS">FPS</option><option value="JO">JO</option></select><select id="polishRodCondition" name="polishRodCondition" class="input-field w-full px-4 py-2 bg-gray-100 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 custom-select"><option value="">Select Condition</option><option value="Used">Used</option><option value="New">New</option></select></div></div>
+                    </div>
+                    
+                    <!-- Remarks Field -->
+                    <div><label class="block text-sm font-medium mb-1 text-gray-700">Remarks</label><textarea id="remarks" name="remarks" placeholder="Add any remarks here" class="input-field w-full px-4 py-2 bg-gray-100 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea></div>
+                    
+                    <!-- Done By Dropdown -->
+                    <div class="mt-4"><label class="block text-sm font-medium mb-1 text-gray-700">Done By *</label><div class="multiselect-container"><select id="doneByHidden" name="doneBy" multiple class="multiselect-selected"></select><div class="input-field w-full px-4 py-2 bg-gray-100 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 custom-select multisecept-trigger" onclick="toggleDropdown()"><span id="multiselect-placeholder">Select Team Member(s)</span></div><div id="multiselect-dropdown" class="multiselect-dropdown"></div><div id="multiselect-tags" class="multiselect-tags"></div></div><p class="text-xs text-gray-500 mt-1">Click to select team members</p></div>
+                    
+                    <!-- Form Buttons -->
+                    <div class="flex flex-wrap gap-2 mt-6">
+                        <button type="submit" id="submit-btn" class="px-6 py-2 bg-indigo-600 text-white rounded-xl font-medium shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300"><i class="fas fa-plus-circle mr-2"></i>Add Log</button>
+                        <button type="button" id="cancel-btn" class="px-6 py-2 bg-gray-400 text-white rounded-xl font-medium shadow-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-300 hidden"><i class="fas fa-times mr-2"></i>Cancel</button>
+                        <button type="button" id="export-btn" class="px-6 py-2 bg-green-600 text-white rounded-xl font-medium shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-300"><i class="fas fa-file-export mr-2"></i>Export Logs</button>
+                        <button type="button" id="clear-all-btn" class="px-6 py-2 bg-red-600 text-white rounded-xl font-medium shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-300"><i class="fas fa-trash-alt mr-2"></i>Clear All</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Share Options Panel -->
+            <div id="share-options-panel" class="share-options-panel bg-indigo-50 p-4 rounded-xl mb-6 hidden">
+                <h3 class="text-lg font-semibold text-indigo-800 mb-3"><i class="fas fa-share-alt mr-2"></i>Share Options</h3>
+                <div class="flex flex-wrap gap-3">
+                    <button id="share-selected-btn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"><i class="fas fa-share-square mr-1"></i> Share Selected</button>
+                    <button id="share-grouped-btn" class="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors"><i class="fas fa-object-group mr-1"></i> Share Grouped by Work Type</button>
+                    <button id="share-individual-btn" class="px-4 py-2 bg-pink-600 text-white rounded-lg text-sm font-medium hover:bg-pink-700 transition-colors"><i class="fas fa-file-alt mr-1"></i> Share Individually</button>
+                    <button id="cancel-share-btn" class="px-4 py-2 bg-gray-500 text-white rounded-lg text-sm font-medium hover:bg-gray-600 transition-colors"><i class="fas fa-times mr-1"></i> Cancel</button>
+                </div>
+            </div>
+
+            <!-- Logs List Section -->
+            <section>
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-semibold text-gray-800"><i class="fas fa-list-alt mr-2 text-indigo-500"></i>Work Logs</h2>
+                    <button id="select-logs-btn" class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors"><i class="fas fa-check-square mr-1"></i> Select Logs</button>
+                </div>
+                
+                <div id="logs-container" class="space-y-4"></div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-600 text-sm">
+            <p>Fawares Petroleum Services Co &copy; 2023 | All data is stored locally in your browser</p>
+            <p id="app-status" class="mt-2 text-xs">App is ready for offline use</p>
+        </footer>
+    </div>
+
+    <script>
+        // Team members data
+        const teamMembers = [
+            "Ahmed Mustafa", "Thomas Joseph", "Lakshmaya Reddy", "Mohammed Khalil",
+            "Amzad Khan", "Abouel Farag", "Dinu Godly", "Mohammed Manzoor",
+            "Abdullah Al-Mulla", "Sulaiman Al-Sarawai", "Mohammad Al-Shaiji",
+            "Mabkhout Almarri", "Robin John"
+        ];
+
+        // Rig No options
+        const rigNoOptions = [
+            "51", "52", "53", "54", "60", "61", "71", "72", "80", "81", "82", "83"
+        ];
+
+        // Well No options (truncated for brevity)
+        const wellNoOptions = [
+            "ARQ-15", "ARQ-17", "ARQ-5", "ARQ-6", "ARQ-7", "ARQ-9", "HM-1", "M-1203", "M-153", "M-155"
+        ];
+
+        // Selected team members
+        let selectedTeamMembers = [];
+        
+        // Share mode and content
+        let currentShareMode = '';
+        let currentShareContent = '';
+        
+        // PWA variables
+        let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
+        const offlineNotification = document.getElementById('offlineNotification');
+        const appStatus = document.getElementById('app-status');
+        const syncStatus = document.getElementById('syncStatus');
+        const syncProgress = document.getElementById('syncProgress');
+        const syncStatusText = document.getElementById('syncStatusText');
+        const deviceIdBadge = document.getElementById('deviceId');
+        const userIdSuffix = document.getElementById('user-id-suffix');
+
+        // Generate a unique device ID
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('deviceId');
+            if (!deviceId) {
+                deviceId = Math.random().toString(36).substring(2, 10).toUpperCase();
+                localStorage.setItem('deviceId', deviceId);
+            }
+            return deviceId;
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set device ID
+            const deviceId = getDeviceId();
+            deviceIdBadge.textContent = deviceId;
+            userIdSuffix.textContent = deviceId;
+            
+            renderTeamMemberDropdown();
+            populateSearchableDropdowns();
+            loadWorkLogs();
+            setupEventListeners();
+            setupPWA();
+            setupBackgroundSync();
+            
+            // Set today's date as default
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.multiselect-container')) {
+                    document.getElementById('multiselect-dropdown').classList.remove('show');
+                }
+                if (!e.target.closest('.searchable-dropdown')) {
+                    document.querySelectorAll('.dropdown-options').forEach(dropdown => {
+                        dropdown.classList.remove('show');
+                    });
+                }
+            });
+        });
+
+        // PWA Setup
+        function setupPWA() {
+            // Listen for beforeinstallprompt event
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                installBtn.style.display = 'flex';
+                appStatus.textContent = 'App can be installed on your device';
+            });
+            
+            // Handle install button click
+            installBtn.addEventListener('click', async () => {
+                if (!deferredPrompt) return;
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                    installBtn.style.display = 'none';
+                }
+                deferredPrompt = null;
+            });
+            
+            // Listen for app installed event
+            window.addEventListener('appinstalled', () => {
+                console.log('PWA was installed');
+                installBtn.style.display = 'none';
+                deferredPrompt = null;
+                appStatus.textContent = 'App has been installed successfully';
+            });
+            
+            // Check network status
+            window.addEventListener('online', () => {
+                offlineNotification.style.display = 'none';
+                appStatus.textContent = 'App is online';
+                // Try to sync when coming back online
+                syncData();
+            });
+            
+            window.addEventListener('offline', () => {
+                offlineNotification.style.display = 'block';
+                appStatus.textContent = 'App is working offline';
+                syncStatusText.textContent = 'Working offline';
+            });
+        }
+
+        // Setup background synchronization
+        function setupBackgroundSync() {
+            // Enable sync by default if online
+            window.syncEnabled = true;
+            
+            // Try to sync every 2 minutes if online
+            setInterval(() => {
+                if (navigator.onLine && window.syncEnabled) {
+                    syncData();
+                }
+            }, 120000);
+            
+            // Initial sync if online
+            if (navigator.onLine) {
+                setTimeout(syncData, 2000);
+            }
+        }
+
+        // Background sync function
+        function syncData() {
+            if (!navigator.onLine || !window.syncEnabled) return;
+            
+            // Show sync in progress
+            syncProgress.style.display = 'inline';
+            syncStatusText.textContent = 'Syncing data...';
+            
+            // Get current data
+            const workLogs = getWorkLogs();
+            const deviceId = getDeviceId();
+            const lastSync = localStorage.getItem('lastSync') || 0;
+            
+            // In a real app, this would be an API call to your server
+            // For this example, we'll simulate it with localStorage as a shared storage
+            try {
+                // Get data from "server" (localStorage acting as server)
+                const serverData = JSON.parse(localStorage.getItem('fawaresServerData') || '{}');
+                
+                // If no server data exists, initialize it
+                if (!serverData.logs) {
+                    serverData.logs = [];
+                }
+                
+                // Merge local changes with server data
+                const mergedLogs = mergeLogs(serverData.logs, workLogs, deviceId);
+                
+                // Save merged data back to "server"
+                serverData.logs = mergedLogs;
+                serverData.lastUpdated = new Date().toISOString();
+                localStorage.setItem('fawaresServerData', JSON.stringify(serverData));
+                
+                // Update local storage with merged data
+                localStorage.setItem('workLogs', JSON.stringify(mergedLogs));
+                
+                // Save sync time
+                localStorage.setItem('lastSync', new Date().toISOString());
+                
+                // Update UI
+                syncProgress.style.display = 'none';
+                syncStatusText.textContent = 'Synced ' + new Date().toLocaleTimeString();
+                
+                // Reload logs to show updated data
+                loadWorkLogs();
+                
+                console.log('Background sync completed successfully');
+            } catch (error) {
+                syncProgress.style.display = 'none';
+                syncStatusText.textContent = 'Sync failed';
+                console.error('Sync error:', error);
+            }
+        }
+
+        // Merge logs from different devices
+        function mergeLogs(serverLogs, localLogs, deviceId) {
+            // Create a map of all logs by ID for easy lookup
+            const logMap = new Map();
+            
+            // Add all server logs to the map
+            serverLogs.forEach(log => {
+                logMap.set(log.id, {...log});
+            });
+            
+            // Add or update with local logs
+            localLogs.forEach(localLog => {
+                if (logMap.has(localLog.id)) {
+                    // If server has this log, check which is newer
+                    const serverLog = logMap.get(localLog.id);
+                    const localTime = new Date(localLog.updatedAt || localLog.createdAt);
+                    const serverTime = new Date(serverLog.updatedAt || serverLog.createdAt);
+                    
+                    if (localTime > serverTime) {
+                        // Local version is newer, update it
+                        logMap.set(localLog.id, {...localLog});
+                    }
+                } else {
+                    // This is a new log, add it
+                    logMap.set(localLog.id, {...localLog});
+                }
+            });
+            
+            // Convert map back to array and sort by date
+            return Array.from(logMap.values()).sort((a, b) => {
+                return new Date(b.createdAt) - new Date(a.createdAt);
+            });
+        }
+
+        // Save work log to localStorage with auto-sync
+        function saveWorkLog() {
+            // Get form data
+            const formData = {
+                id: document.getElementById('work-log-form').dataset.editingId || Date.now().toString(),
+                date: document.getElementById('date').value,
+                workType: document.getElementById('workType').value,
+                pumpAPI: document.getElementById('pumpAPI').value,
+                rigNo: document.getElementById('rigNo').value,
+                wellNo: document.getElementById('wellNo').value,
+                pumpSLNo: document.getElementById('pumpSLNo').value,
+                onOffTool: document.getElementById('onOffTool').value,
+                onOffToolType: document.getElementById('onOffToolType').value,
+                polishRod: document.getElementById('polishRod').value,
+                polishRodType: document.getElementById('polishRodType').value,
+                polishRodCondition: document.getElementById('polishRodCondition').value,
+                remarks: document.getElementById('remarks').value,
+                doneBy: selectedTeamMembers,
+                createdAt: document.getElementById('work-log-form').dataset.editingId ? 
+                    (getWorkLogs().find(log => log.id === document.getElementById('work-log-form').dataset.editingId)?.createdAt || new Date().toISOString()) : 
+                    new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+
+            // Validate required fields
+            if (!formData.date || !formData.workType || !formData.pumpAPI || !formData.rigNo || formData.doneBy.length === 0) {
+                showNotification('Please fill all required fields.', 'error');
+                return;
+            }
+
+            // Get existing logs or initialize empty array
+            const workLogs = getWorkLogs();
+
+            if (document.getElementById('work-log-form').dataset.editingId) {
+                // Update existing log
+                const index = workLogs.findIndex(log => log.id === document.getElementById('work-log-form').dataset.editingId);
+                if (index !== -1) {
+                    workLogs[index] = formData;
+                    showNotification('Work log updated successfully! ✅', 'success');
+                }
+            } else {
+                // Add new log
+                workLogs.push(formData);
+                showNotification('New work log added successfully! ✨', 'success');
+            }
+
+            // Save to localStorage
+            localStorage.setItem('workLogs', JSON.stringify(workLogs));
+
+            // Trigger background sync
+            if (navigator.onLine) {
+                syncData();
+            }
+
+            // Refresh UI
+            resetForm();
+            loadWorkLogs();
+        }
+
+        // Get work logs from localStorage
+        function getWorkLogs() {
+            return JSON.parse(localStorage.getItem('workLogs') || '[]');
+        }
+
+        // Load work logs into UI
+        function loadWorkLogs() {
+            const workLogs = getWorkLogs();
+            const logsContainer = document.getElementById('logs-container');
+            
+            if (workLogs.length === 0) {
+                logsContainer.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fas fa-clipboard-list text-4xl mb-4"></i>
+                        <p>No work logs yet. Add one using the form above.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort logs by date (newest first)
+            workLogs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            // Generate HTML for logs
+            logsContainer.innerHTML = workLogs.map(log => `
+                <div class="relative">
+                    <input type="checkbox" class="log-checkbox" value="${log.id}">
+                    <div class="log-item p-4 bg-gray-100 rounded-xl shadow-sm flex flex-col transition-all duration-300 hover:bg-gray-200 fade-in">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                            <p><span class="font-bold">Date:</span> ${formatDate(log.date)}</p>
+                            <p><span class="font-semibold">Type of Work:</span> ${log.workType}</p>
+                            <p><span class="font-semibold">Rig No:</span> ${log.rigNo}</p>
+                            <p><span class="font-semibold">Well No:</span> ${log.wellNo || 'N/A'}</p>
+                            <p><span class="font-semibold">Pump SL No:</span> ${log.pumpSLNo || 'N/A'}</p>
+                            <p><span class="font-semibold">ON/OFF Tool:</span> ${log.onOffTool ? `${log.onOffTool}" ${log.onOffToolType}` : 'N/A'}</p>
+                            <p><span class="font-semibold">Polish Rod:</span> ${log.polishRod ? `${log.polishRod} ${log.polishRodType} ${log.polishRodCondition}` : 'N/A'}</p>
+                            <p><span class="font-semibold">Remarks:</span> ${log.remarks || 'N/A'}</p>
+                            <p><span class="font-semibold">Done By:</span> ${Array.isArray(log.doneBy) ? log.doneBy.join(', ') : log.doneBy}</p>
+                            <p><span class="font-semibold">Pump API:</span> ${log.pumpAPI}</p>
+                        </div>
+                        <div class="flex justify-end space-x-2 mt-4">
+                            <button onclick="startEditing('${log.id}')" class="px-4 py-2 text-sm bg-yellow-500 text-white rounded-lg shadow-sm hover:bg-yellow-600 transition-all duration-300">
+                                <i class="fas fa-edit mr-1"></i>Edit
+                            </button>
+                            <button onclick="shareLog(${JSON.stringify(log).replace(/"/g, '&quot;')})" class="px-4 py-2 text-sm bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600 transition-all duration-300">
+                                <i class="fas fa-share-alt mr-1"></i>Share
+                            </button>
+                            <button onclick="deleteLog('${log.id}')" class="px-4 py-2 text-sm bg-red-500 text-white rounded-lg shadow-sm hover:bg-red-600 transition-all duration-300">
+                                <i class="fas fa-trash-alt mr-1"></i>Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add event listeners to checkboxes
+            document.querySelectorAll('.log-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        this.parentElement.classList.add('selected');
+                    } else {
+                        this.parentElement.classList.remove('selected');
+                    }
+                });
+            });
+        }
+
+        // [Additional functions would be here - I've omitted some for brevity]
+
+        // Populate searchable dropdowns
+        function populateSearchableDropdowns() {
+            // Populate Rig No dropdown
+            const rigNoOptionsContainer = document.getElementById('rigNo-options');
+            rigNoOptionsContainer.innerHTML = '';
+            
+            rigNoOptions.forEach(option => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'dropdown-option';
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', function() {
+                    document.getElementById('rigNo').value = option;
+                    rigNoOptionsContainer.classList.remove('show');
+                });
+                rigNoOptionsContainer.appendChild(optionElement);
+            });
+            
+            // Populate Well No dropdown
+            const wellNoOptionsContainer = document.getElementById('wellNo-options');
+            wellNoOptionsContainer.innerHTML = '';
+            
+            wellNoOptions.forEach(option => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'dropdown-option';
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', function() {
+                    document.getElementById('wellNo').value = option;
+                    wellNoOptionsContainer.classList.remove('show');
+                });
+                wellNoOptionsContainer.appendChild(optionElement);
+            });
+            
+            // Add event listeners for searchable dropdowns
+            setupSearchableDropdown('rigNo', 'rigNo-options', rigNoOptions);
+            setupSearchableDropdown('wellNo', 'wellNo-options', wellNoOptions);
+        }
+
+        // Setup searchable dropdown functionality
+        function setupSearchableDropdown(inputId, optionsId, optionsArray) {
+            const input = document.getElementById(inputId);
+            const optionsContainer = document.getElementById(optionsId);
+            
+            input.addEventListener('focus', function() {
+                optionsContainer.classList.add('show');
+                filterOptions(inputId, optionsId, optionsArray);
+            });
+            
+            input.addEventListener('input', function() {
+                filterOptions(inputId, optionsId, optionsArray);
+            });
+            
+            input.addEventListener('click', function() {
+                optionsContainer.classList.toggle('show');
+                filterOptions(inputId, optionsId, optionsArray);
+            });
+        }
+
+        // Filter options based on search input
+        function filterOptions(inputId, optionsId, optionsArray) {
+            const input = document.getElementById(inputId);
+            const optionsContainer = document.getElementById(optionsId);
+            const searchTerm = input.value.toLowerCase();
+            
+            optionsContainer.innerHTML = '';
+            
+            const filteredOptions = optionsArray.filter(option => 
+                option.toLowerCase().includes(searchTerm)
+            );
+            
+            if (filteredOptions.length === 0) {
+                const noResults = document.createElement('div');
+                noResults.className = 'dropdown-option';
+                noResults.textContent = 'No results found';
+                optionsContainer.appendChild(noResults);
+            } else {
+                filteredOptions.forEach(option => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'dropdown-option';
+                    optionElement.textContent = option;
+                    optionElement.addEventListener('click', function() {
+                        input.value = option;
+                        optionsContainer.classList.remove('show');
+                    });
+                    optionsContainer.appendChild(optionElement);
+                });
+            }
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+
+        // Show notification
+        function showNotification(text, type) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            
+            notificationText.textContent = text;
+            notification.className = `fixed top-4 right-4 z-50 p-4 text-white rounded-xl shadow-lg transition-transform duration-300 transform slide-in-right ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            
+            // Auto hide after 3 seconds
+            setTimeout(hideNotification, 3000);
+        }
+
+        // Hide notification
+        function hideNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.add('hidden');
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Form submission
+            document.getElementById('work-log-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveWorkLog();
+            });
+
+            // Export logs
+            document.getElementById('export-btn').addEventListener('click', function() {
+                exportToCSV();
+            });
+
+            // Clear all logs
+            document.getElementById('clear-all-btn').addEventListener('click', function() {
+                clearAllLogs();
+            });
+
+            // Manual sync button (double-click on sync status)
+            document.getElementById('syncStatus').addEventListener('dblclick', function() {
+                if (navigator.onLine) {
+                    syncData();
+                } else {
+                    showNotification('Cannot sync while offline', 'error');
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>
